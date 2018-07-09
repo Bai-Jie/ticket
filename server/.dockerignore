@@ -1,0 +1,7 @@
+**
+!Dockerfile
+!node_modules
+!dist
+!package.json
+!README.md
+!yarn.lock

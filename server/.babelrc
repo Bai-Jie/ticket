@@ -1,0 +1,20 @@
+{
+  "presets": ["flow"],
+  "plugins": [
+    "syntax-object-rest-spread",
+    "transform-decorators-legacy",
+    "transform-class-properties",
+    ["flow-runtime", {"assert": true}]
+  ],
+  "env": {
+    "test": {
+      "presets": ["env", "flow"],
+      "plugins": [
+        "syntax-object-rest-spread",
+        "transform-decorators-legacy",
+        "transform-class-properties",
+        ["flow-runtime", {"assert": true}]
+      ]
+    }
+  }
+}
