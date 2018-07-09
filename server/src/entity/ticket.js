@@ -29,6 +29,15 @@ export class TicketBox {
 
 }
 
+export function assignTicketBox(to: TicketBox, from: TicketBox) {
+  to.id = from.id;
+  to.eventId = from.eventId;
+  to.name = from.name;
+  to.description = from.description;
+  to.totalAmount = from.totalAmount;
+  to.price = from.price;
+}
+
 export class Ticket {
   id: number;
   /**

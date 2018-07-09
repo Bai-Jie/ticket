@@ -41,11 +41,11 @@ async function startMockServer(argv) {
 
   await connect();
 
-  if (argv.sampleData) {
-    await setupSampleData();
-  }
+  const {app, ticketRepository, eventRepository} = createObjects();
 
-  const {app} = createObjects();
+  if (argv.sampleData) {
+    await setupSampleData(ticketRepository, eventRepository);
+  }
 
   app.listen(4000, function () {
     const {port} = this.address();
