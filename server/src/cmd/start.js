@@ -1,6 +1,6 @@
 import {setupSampleData} from "../config-database-mock";
 import {connect} from "../config-database";
-import {createApp} from "../app";
+import {createApp, createObjects} from "../app";
 
 const commandServer = {
   command: 'server',
@@ -14,7 +14,7 @@ async function startServer(argv) {
 
   await connect();
 
-  const app = createApp();
+  const {app} = createObjects();
 
   app.listen(4000, function () {
     const {port} = this.address();
@@ -45,7 +45,7 @@ async function startMockServer(argv) {
     await setupSampleData();
   }
 
-  const app = createApp();
+  const {app} = createObjects();
 
   app.listen(4000, function () {
     const {port} = this.address();

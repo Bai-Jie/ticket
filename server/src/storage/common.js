@@ -1,6 +1,6 @@
 export interface DataRepository {
   // dumpData(): Promise<void>;
-  deleteAllData(): Promise<void>;
+  // deleteAllData(): Promise<void>;
 }
 
 /**

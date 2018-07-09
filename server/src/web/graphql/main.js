@@ -2,21 +2,35 @@
 
 import {GraphQLObjectType, GraphQLSchema} from "graphql";
 
-import {nodeField} from "./basic";
+import {BasicGraphQLApi} from "./basic";
+import {EventGraphQLApi} from "./event";
 
-const queryType = new GraphQLObjectType({
-  name: 'Query',
-  fields: () => ({
-    node: nodeField
-  })
-});
+export class MainGraphQLApi {
 
-const mutationType = new GraphQLObjectType({
-  name: 'Mutation',
-  fields: () => ({})
-});
+  _schema;
 
-export const schema = new GraphQLSchema({
-  query: queryType,
-  // mutation: mutationType
-});
+  constructor(basicGraphQLApi: BasicGraphQLApi, eventGraphQLApi: EventGraphQLApi) {
+    const queryType = new GraphQLObjectType({
+      name: 'Query',
+      fields: () => ({
+        node: basicGraphQLApi.nodeField,
+        events: eventGraphQLApi.eventsField
+      })
+    });
+
+    const mutationType = new GraphQLObjectType({
+      name: 'Mutation',
+      fields: () => ({})
+    });
+
+    this._schema = new GraphQLSchema({
+      query: queryType,
+      // mutation: mutationType
+    });
+  }
+
+  get schema() {
+    return this._schema;
+  }
+
+}

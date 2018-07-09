@@ -2,19 +2,39 @@
 
 import {fromGlobalId, nodeDefinitions} from "graphql-relay";
 import {GraphQLEnumType} from "graphql";
+import {EventService} from "../../business/event";
 
-export const {nodeInterface, nodeField} = nodeDefinitions(
-  globalId => {
-    const {type, id} = fromGlobalId(globalId);
-    //TODO need implement
-    /*if (type === 'Faction') {
-        return getFaction(id);
-    }
-    if (type === 'Ship') {
-        return getShip(id);
-    }*/
+export class BasicGraphQLApi {
+
+  _nodeInterface;
+  _nodeField;
+
+  constructor(eventService: EventService) {
+    const nodeDefinition = nodeDefinitions(
+      globalId => {
+        const {type} = fromGlobalId(globalId);
+        switch (type) {
+          case 'Event':
+            return eventService.findEventById(unpackGlobalId(globalId, 'Event'));
+          default:
+            throw new Error(`尚不支持的 node id 类型: ${type}`);
+        }
+      }
+    );
+    this._nodeInterface = nodeDefinition.nodeInterface;
+    this._nodeField = nodeDefinition.nodeField;
   }
-);
+
+  get nodeInterface() {
+    return this._nodeInterface;
+  }
+
+  get nodeField() {
+    return this._nodeField;
+  }
+
+}
+
 
 export function unpackGlobalId(packedId: string, expectedType: string) {
   //## unpack packedId
