@@ -43,7 +43,7 @@ export function createObjects() {
   const basicGraphQLApi = new BasicGraphQLApi(eventService);
   const ticketGraphQLApi = new TicketGraphQLApi(ticketService, basicGraphQLApi);
   const eventGraphQLApi = new EventGraphQLApi(ticketService, eventService, basicGraphQLApi, ticketGraphQLApi);
-  const mainGraphQLApi = new MainGraphQLApi(basicGraphQLApi, eventGraphQLApi);
+  const mainGraphQLApi = new MainGraphQLApi(basicGraphQLApi, ticketGraphQLApi, eventGraphQLApi);
   const app = createApp(mainGraphQLApi);
   return {
     eventRepository,

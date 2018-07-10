@@ -2,13 +2,14 @@
 
 import {TicketService} from "../../business/ticket";
 import {BasicGraphQLApi} from "./basic";
-import {globalIdField} from "graphql-relay";
+import {globalIdField, mutationWithClientMutationId} from "graphql-relay";
 import {TicketBox} from "../../entity/ticket";
-import {GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString} from "graphql";
+import {GraphQLID, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString} from "graphql";
 
 export class TicketGraphQLApi {
 
   _ticketBoxGraphQLType;
+  _createOrderMutation;
 
   constructor(ticketService: TicketService, basicGraphQLApi: BasicGraphQLApi) {
     this._ticketBoxGraphQLType = new GraphQLObjectType({
@@ -67,10 +68,45 @@ export class TicketGraphQLApi {
         }
       }
     });
+
+    this._createOrderMutation = mutationWithClientMutationId({
+      name: 'CreateOrder',
+      description: '创建买票订单',
+      inputFields: {
+        ticketId: {
+          description: '下单的票盒（票种）的 id',
+          type: new GraphQLNonNull(GraphQLID)
+        },
+        numberOfTicketsToBuy: {
+          description: '要购买的票数',
+          type: new GraphQLNonNull(GraphQLInt)
+        },
+        applicantInfo: {
+          description: '报名者信息。内容格式为 JSON 字符串，JSON 对象为 {[字段名]: 字段值}',
+          type: new GraphQLNonNull(GraphQLString)
+        },
+        participantInfos: {
+          description: '参与者信息。内容格式类似 applicantInfo',
+          type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(GraphQLString)))
+        }
+      },
+      outputFields: {
+        message: {
+          type: new GraphQLNonNull(GraphQLString)
+        }
+      },
+      mutateAndGetPayload(input) {
+        return {message: `ok\nyou sent:\n` + JSON.stringify(input, null, 2)};
+      }
+    });
   }
 
   get ticketBoxGraphQLType() {
     return this._ticketBoxGraphQLType;
+  }
+
+  get createOrderMutation() {
+    return this._createOrderMutation;
   }
 
 }

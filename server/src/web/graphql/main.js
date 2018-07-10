@@ -4,12 +4,13 @@ import {GraphQLObjectType, GraphQLSchema} from "graphql";
 
 import {BasicGraphQLApi} from "./basic";
 import {EventGraphQLApi} from "./event";
+import {TicketGraphQLApi} from "./ticket";
 
 export class MainGraphQLApi {
 
   _schema;
 
-  constructor(basicGraphQLApi: BasicGraphQLApi, eventGraphQLApi: EventGraphQLApi) {
+  constructor(basicGraphQLApi: BasicGraphQLApi, ticketGraphQLApi: TicketGraphQLApi, eventGraphQLApi: EventGraphQLApi) {
     const queryType = new GraphQLObjectType({
       name: 'Query',
       fields: () => ({
@@ -20,12 +21,14 @@ export class MainGraphQLApi {
 
     const mutationType = new GraphQLObjectType({
       name: 'Mutation',
-      fields: () => ({})
+      fields: {
+        createOrder: ticketGraphQLApi.createOrderMutation
+      }
     });
 
     this._schema = new GraphQLSchema({
       query: queryType,
-      // mutation: mutationType
+      mutation: mutationType
     });
   }
 
