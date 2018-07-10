@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './BuyTicket.css';
-import {loadEventInfo} from "../business/ticket";
+import {createOrder, loadEventInfo} from "../business/ticket";
 import {base64ascii} from "../business/utils";
 import HeaderView from "../component/HeaderView";
 import SelectTicketBoxView from "../component/SelectTicketBoxView";
@@ -15,7 +15,9 @@ export default class BuyTicket extends Component {
         isLoading: true,
         ticketBoxes: [],
         selectedTicketBoxId: null,
-        numberOfTicketsToBuy: 1
+        numberOfTicketsToBuy: 1,
+        applicantInfo: {},
+        participantInfos: [{}] // 应保持 participantInfos.length === numberOfTicketsToBuy
     };
 
     async componentDidMount() {
@@ -49,40 +51,82 @@ export default class BuyTicket extends Component {
                 />
                 <GroupView
                     title="报名者信息"
-                    contentView={<FormView fields={selectedTicketBox.requisiteApplicantInfo} />}
+                    contentView={<FormView
+                        fields={selectedTicketBox.requisiteApplicantInfo}
+                        onChange={this.handleApplicantInfoChange}/>}
                 />
                 {Array(numberOfTicketsToBuy).fill(0).map((_, index) =>
                     <GroupView
                         title={`参与者信息（第 ${index + 1} 位）`}
-                        contentView={<FormView fields={selectedTicketBox.requisiteParticipantInfo} />}
+                        contentView={<FormView
+                            fields={selectedTicketBox.requisiteParticipantInfo}
+                            onChange={changed => this.handleParticipantInfoChange(index, changed)}/>}
                     />
                 )}
             </div>
             <PayView
                 selectedTicketBox={selectedTicketBox}
                 numberOfTicketsToBuy={numberOfTicketsToBuy}
+                onClickPayButton={this.handleClickPayButton}
             />
         </div>);
     }
 
     handleClickSelectTicketBoxItem = (clickedTicketBox) => {
-        this.setState((prevState) => ({
-            selectedTicketBoxId: clickedTicketBox.id,
-            numberOfTicketsToBuy: Math.min(
+        this.setState((prevState) => {
+            const newNumberOfTicketsToBuy = Math.min(
                 prevState.numberOfTicketsToBuy,
                 this.selectedTicketBoxId(prevState, clickedTicketBox.id).remainCount
-            )
-        }));
+            );
+            const newParticipantInfos = Array(newNumberOfTicketsToBuy).fill({});
+            return {
+                selectedTicketBoxId: clickedTicketBox.id,
+                numberOfTicketsToBuy: newNumberOfTicketsToBuy,
+                applicantInfo: {},
+                participantInfos: newParticipantInfos
+            };
+        });
     };
 
     handleNumberOfTicketsToBuyChange = (newNumberOfTicketsToBuy) => {
         newNumberOfTicketsToBuy = Math.max(newNumberOfTicketsToBuy, 0);
-        this.setState((prevState) => ({
-            numberOfTicketsToBuy: Math.min(
+        this.setState((prevState) => {
+            newNumberOfTicketsToBuy = Math.min(
                 newNumberOfTicketsToBuy,
                 this.selectedTicketBoxId(prevState).remainCount
+            );
+            const newParticipantInfos = prevState.participantInfos.length >= newNumberOfTicketsToBuy ?
+                prevState.participantInfos.slice(0, newNumberOfTicketsToBuy) :
+                prevState.participantInfos.concat(Array(newNumberOfTicketsToBuy - prevState.participantInfos.length).fill({}));
+            return {
+                numberOfTicketsToBuy: newNumberOfTicketsToBuy,
+                participantInfos: newParticipantInfos
+            };
+        });
+    };
+
+    handleApplicantInfoChange = (fieldNameAndValue) => {
+        this.setState(preState => ({
+            applicantInfo: {...preState.applicantInfo, ...fieldNameAndValue}
+        }));
+    };
+
+    handleParticipantInfoChange = (index, fieldNameAndValue) => {
+        this.setState(prevState => ({
+            participantInfos: prevState.participantInfos.map(
+                (current, currentIndex) => currentIndex === index ? {...current, ...fieldNameAndValue} : current
             )
         }));
+    };
+
+    handleClickPayButton = async () => {
+        const {selectedTicketBoxId, numberOfTicketsToBuy, applicantInfo, participantInfos} = this.state;
+        const {message} = await createOrder(
+            selectedTicketBoxId,
+            numberOfTicketsToBuy,
+            JSON.stringify(applicantInfo),
+            participantInfos.map(it => JSON.stringify(it)));
+        alert('来自服务端的 message：\n' + message);
     };
 
     selectedTicketBoxId(state, selectedTicketBoxId) {

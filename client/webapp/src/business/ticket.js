@@ -38,3 +38,27 @@ export async function loadEventInfo(eventId) {
         return response.data.data.node;
     }
 }
+
+export async function createOrder(ticketId, numberOfTicketsToBuy, applicantInfo, participantInfos) {
+    const response = await graphqlApi.request({
+        data: {
+            query: `
+                mutation createOrder($createOrderInput: CreateOrderInput!) {
+                    createOrder(input: $createOrderInput) {
+                        message
+                    }
+                }
+            `,
+            variables: {
+                createOrderInput: {
+                    ticketId, numberOfTicketsToBuy, applicantInfo, participantInfos
+                }
+            }
+        }
+    });
+    if (response.data.errors) {
+        throw new Error(JSON.stringify(response.data.errors));
+    } else {
+        return response.data.data.createOrder;
+    }
+}
