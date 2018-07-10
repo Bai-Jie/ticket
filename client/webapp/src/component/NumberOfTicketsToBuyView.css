@@ -1,0 +1,13 @@
+.number-of-ticket-to-buy-container {
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.number-of-ticket-to-buy-container > * {
+    margin: 0 16px;
+}
+
+.number-of-ticket-to-buy-field-name {
+    flex: 1 1 auto;
+}

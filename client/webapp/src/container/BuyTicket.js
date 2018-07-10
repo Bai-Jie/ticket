@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import SelectTicketBoxView from "../component/SelectTicketBoxView";
 import {loadEventInfo} from "../business/ticket";
 import {base64ascii} from "../business/utils";
+import SelectTicketBoxView from "../component/SelectTicketBoxView";
+import NumberOfTicketsToBuyView from "../component/NumberOfTicketsToBuyView";
 
 export default class BuyTicket extends Component {
 
@@ -22,7 +23,7 @@ export default class BuyTicket extends Component {
     }
 
     render() {
-        const {isLoading, ticketBoxes, selectedTicketBoxId} = this.state;
+        const {isLoading, ticketBoxes, selectedTicketBoxId, numberOfTicketsToBuy} = this.state;
 
         if (isLoading) {
             return <p>加载中…</p>;
@@ -32,14 +33,40 @@ export default class BuyTicket extends Component {
             <SelectTicketBoxView
                 ticketBoxes={ticketBoxes}
                 selectedTicketBoxId={selectedTicketBoxId}
-                onClickSelectTicketBoxItem={this.handleClickSelectTicketBoxItem}/>
+                onClickSelectTicketBoxItem={this.handleClickSelectTicketBoxItem}
+            />
+            <NumberOfTicketsToBuyView
+                numberOfTicketsToBuy={numberOfTicketsToBuy}
+                onNumberOfTicketsToBuyChange={this.handleNumberOfTicketsToBuyChange}
+            />
         </div>);
     }
 
     handleClickSelectTicketBoxItem = (clickedTicketBox) => {
-        this.setState({
-            selectedTicketBoxId: clickedTicketBox.id
-        });
+        this.setState((prevState) => ({
+            selectedTicketBoxId: clickedTicketBox.id,
+            numberOfTicketsToBuy: Math.min(
+                prevState.numberOfTicketsToBuy,
+                this.selectedTicketBoxId(prevState, clickedTicketBox.id).remainCount
+            )
+        }));
     };
+
+    handleNumberOfTicketsToBuyChange = (newNumberOfTicketsToBuy) => {
+        newNumberOfTicketsToBuy = Math.max(newNumberOfTicketsToBuy, 0);
+        this.setState((prevState) => ({
+            numberOfTicketsToBuy: Math.min(
+                newNumberOfTicketsToBuy,
+                this.selectedTicketBoxId(prevState).remainCount
+            )
+        }));
+    };
+
+    selectedTicketBoxId(state, selectedTicketBoxId) {
+        if (selectedTicketBoxId === undefined) {
+            selectedTicketBoxId = state.selectedTicketBoxId;
+        }
+        return state.ticketBoxes.find(it => it.id === selectedTicketBoxId);
+    }
 
 }
