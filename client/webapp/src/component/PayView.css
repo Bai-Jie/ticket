@@ -1,0 +1,26 @@
+.pay-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    background: #FFF;
+}
+
+.pay-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.pay-button {
+    padding: 0;
+    width: 218px;
+    height: 48px;
+    color: #FFF;
+    font-size: 18px;
+    background: #16B9FF;
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 4px;
+}

@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import './BuyTicket.css';
 import {loadEventInfo} from "../business/ticket";
 import {base64ascii} from "../business/utils";
 import SelectTicketBoxView from "../component/SelectTicketBoxView";
 import NumberOfTicketsToBuyView from "../component/NumberOfTicketsToBuyView";
+import PayView from "../component/PayView";
 
 export default class BuyTicket extends Component {
 
@@ -29,15 +31,21 @@ export default class BuyTicket extends Component {
             return <p>加载中…</p>;
         }
 
-        return (<div>
-            <SelectTicketBoxView
-                ticketBoxes={ticketBoxes}
-                selectedTicketBoxId={selectedTicketBoxId}
-                onClickSelectTicketBoxItem={this.handleClickSelectTicketBoxItem}
-            />
-            <NumberOfTicketsToBuyView
+        return (<div className="buy-ticket-container">
+            <div className="buy-ticket-content">
+                <SelectTicketBoxView
+                    ticketBoxes={ticketBoxes}
+                    selectedTicketBoxId={selectedTicketBoxId}
+                    onClickSelectTicketBoxItem={this.handleClickSelectTicketBoxItem}
+                />
+                <NumberOfTicketsToBuyView
+                    numberOfTicketsToBuy={numberOfTicketsToBuy}
+                    onNumberOfTicketsToBuyChange={this.handleNumberOfTicketsToBuyChange}
+                />
+            </div>
+            <PayView
+                selectedTicketBox={this.selectedTicketBoxId(this.state)}
                 numberOfTicketsToBuy={numberOfTicketsToBuy}
-                onNumberOfTicketsToBuyChange={this.handleNumberOfTicketsToBuyChange}
             />
         </div>);
     }

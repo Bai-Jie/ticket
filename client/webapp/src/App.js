@@ -9,7 +9,9 @@ class App extends Component {
         <header className="App-header">
           <h1 className="App-title">活动报名</h1>
         </header>
-        <BuyTicket/>
+        <div className="App-content">
+            <BuyTicket />
+        </div>
       </div>
     );
   }
