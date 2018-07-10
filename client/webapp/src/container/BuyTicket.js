@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './BuyTicket.css';
 import {loadEventInfo} from "../business/ticket";
 import {base64ascii} from "../business/utils";
+import HeaderView from "../component/HeaderView";
 import SelectTicketBoxView from "../component/SelectTicketBoxView";
 import NumberOfTicketsToBuyView from "../component/NumberOfTicketsToBuyView";
 import PayView from "../component/PayView";
@@ -35,6 +36,7 @@ export default class BuyTicket extends Component {
         }
 
         return (<div className="buy-ticket-container">
+            <HeaderView title="活动报名"/>
             <div className="buy-ticket-content">
                 <SelectTicketBoxView
                     ticketBoxes={ticketBoxes}

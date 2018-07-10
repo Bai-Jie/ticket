@@ -1,0 +1,10 @@
+.header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header-title {
+    font-size: 1rem;
+    margin: 8px;
+}

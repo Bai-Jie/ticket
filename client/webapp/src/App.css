@@ -1,23 +1,5 @@
 .App {
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
   background-color: #F2F2F2;
-}
-
-.App-header {
-  color: #000000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.App-title {
-  font-size: 1rem;
-  margin: 8px;
-}
-
-.App-content {
-  flex: 1 1 auto;
 }

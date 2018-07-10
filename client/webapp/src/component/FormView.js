@@ -1,4 +1,5 @@
 import React from 'react';
+import './FormView.css';
 
 export default function FormView(props) {
     const {fields} = props;
@@ -27,8 +28,8 @@ export default function FormView(props) {
 
 function FieldView(props) {
     const {title, contentView} = props;
-    return (<div>
-        {title !== null && title !== undefined && <p className="field-title">{title}</p>}
+    return (<div className="field-container">
+        {title !== null && title !== undefined && <div className="field-title">{title}</div>}
         <div className="field-content">{contentView}</div>
     </div>);
 }
@@ -36,7 +37,7 @@ function FieldView(props) {
 function TextFieldContentView(props) {
     const {textField} = props;
     const {description} = JSON.parse(textField);
-    return <input type="text" placeholder={description} />;
+    return <input className="text-field-input" type="text" placeholder={description} />;
 }
 
 function RadioFieldContentView(props) {
