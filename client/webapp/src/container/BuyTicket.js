@@ -5,6 +5,8 @@ import {base64ascii} from "../business/utils";
 import SelectTicketBoxView from "../component/SelectTicketBoxView";
 import NumberOfTicketsToBuyView from "../component/NumberOfTicketsToBuyView";
 import PayView from "../component/PayView";
+import GroupView from "../component/GroupView";
+import FormView from "../component/FormView";
 
 export default class BuyTicket extends Component {
 
@@ -26,6 +28,7 @@ export default class BuyTicket extends Component {
 
     render() {
         const {isLoading, ticketBoxes, selectedTicketBoxId, numberOfTicketsToBuy} = this.state;
+        const selectedTicketBox = this.selectedTicketBoxId(this.state);
 
         if (isLoading) {
             return <p>加载中…</p>;
@@ -42,9 +45,19 @@ export default class BuyTicket extends Component {
                     numberOfTicketsToBuy={numberOfTicketsToBuy}
                     onNumberOfTicketsToBuyChange={this.handleNumberOfTicketsToBuyChange}
                 />
+                <GroupView
+                    title="报名者信息"
+                    contentView={<FormView fields={selectedTicketBox.requisiteApplicantInfo} />}
+                />
+                {Array(numberOfTicketsToBuy).fill(0).map((_, index) =>
+                    <GroupView
+                        title={`参与者信息（第 ${index + 1} 位）`}
+                        contentView={<FormView fields={selectedTicketBox.requisiteParticipantInfo} />}
+                    />
+                )}
             </div>
             <PayView
-                selectedTicketBox={this.selectedTicketBoxId(this.state)}
+                selectedTicketBox={selectedTicketBox}
                 numberOfTicketsToBuy={numberOfTicketsToBuy}
             />
         </div>);

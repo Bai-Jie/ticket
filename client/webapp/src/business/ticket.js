@@ -10,6 +10,8 @@ fragment EventInfo on Event {
       price
       totalAmount
       remainCount
+      requisiteApplicantInfo
+      requisiteParticipantInfo
     }
 }
 `;
