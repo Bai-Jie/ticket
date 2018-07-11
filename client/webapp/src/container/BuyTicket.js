@@ -15,7 +15,6 @@ export default class BuyTicket extends Component {
         isLoading: true,
         ticketBoxes: [],
         selectedTicketBoxId: null,
-        changeSelectedTicketBoxCounter: 0,
         numberOfTicketsToBuy: 1,
         applicantInfo: {},
         participantInfos: [{}] // 应保持 participantInfos.length === numberOfTicketsToBuy
@@ -35,7 +34,6 @@ export default class BuyTicket extends Component {
             isLoading,
             ticketBoxes,
             selectedTicketBoxId,
-            changeSelectedTicketBoxCounter,
             numberOfTicketsToBuy,
             applicantInfo,
             participantInfos
@@ -60,7 +58,6 @@ export default class BuyTicket extends Component {
                     onNumberOfTicketsToBuyChange={this.handleNumberOfTicketsToBuyChange}
                 />
                 <GroupView
-                    key={changeSelectedTicketBoxCounter}
                     title="报名者信息"
                     contentView={<FormView
                         metaOfFields={selectedTicketBox.requisiteApplicantInfo}
@@ -69,7 +66,7 @@ export default class BuyTicket extends Component {
                 />
                 {Array(numberOfTicketsToBuy).fill(0).map((_, index) =>
                     <GroupView
-                        key={`${changeSelectedTicketBoxCounter}-${index}`}
+                        key={index}
                         title={`参与者信息（第 ${index + 1} 位）`}
                         contentView={<FormView
                             metaOfFields={selectedTicketBox.requisiteParticipantInfo}
@@ -88,11 +85,6 @@ export default class BuyTicket extends Component {
 
     handleClickSelectTicketBoxItem = (clickedTicketBox) => {
         this.setState((prevState) => {
-            // 如果没改选中的票种，则什么也不做，保持原状态
-            if (clickedTicketBox.id === prevState.selectedTicketBoxId) {
-                return prevState;
-            }
-
             const newNumberOfTicketsToBuy = Math.min(
                 prevState.numberOfTicketsToBuy,
                 this.selectedTicketBox(prevState, clickedTicketBox.id).remainCount
@@ -100,7 +92,6 @@ export default class BuyTicket extends Component {
             const newParticipantInfos = Array(newNumberOfTicketsToBuy).fill({});
             return {
                 selectedTicketBoxId: clickedTicketBox.id,
-                changeSelectedTicketBoxCounter: prevState.changeSelectedTicketBoxCounter + 1,
                 numberOfTicketsToBuy: newNumberOfTicketsToBuy,
                 applicantInfo: {},
                 participantInfos: newParticipantInfos
