@@ -5,6 +5,10 @@
     flex-direction: column;
 }
 
+.buy-ticket-container > * {
+    flex: 0 0 auto;
+}
+
 .buy-ticket-content {
     flex: 1 1 auto;
     overflow: auto;
