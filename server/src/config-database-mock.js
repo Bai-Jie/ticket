@@ -14,8 +14,30 @@ export async function setupSampleData(ticketRepository: TicketRepository, eventR
     description: '',
     totalAmount: 5,
     price: '199.00',
-    requisiteApplicantInfo: [],
-    requisiteParticipantInfo:[]
+    requisiteApplicantInfo: [
+      JSON.stringify({
+        name: "手机号",
+        type: "text",
+        description:  "请输入您的手机号，将用于接收出票短信"
+      })
+    ],
+    requisiteParticipantInfo:[
+      JSON.stringify({
+        name: "姓名",
+        type: "text",
+        description:  "请输入参与者的真实姓名"
+      }),
+      JSON.stringify({
+        name: "身份证号",
+        type: "text",
+        description:  "由于现场安保需要，请输入参与者的身份证号"
+      }),
+      JSON.stringify({
+        name: "手机号",
+        type: "text",
+        description:  "请输入参与者的手机号，将用于接收出票短信"
+      })
+    ]
   }));
   const ticket1Id = await ticketRepository.createTicket(ticketBox1Id);
   const ticket12d = await ticketRepository.createTicket(ticketBox1Id);
@@ -26,7 +48,7 @@ export async function setupSampleData(ticketRepository: TicketRepository, eventR
     eventId,
     name: '站票',
     description: '无座位，可自备小板凳',
-    totalAmount: 1000,
+    totalAmount: 50,
     price: '99.00',
     requisiteApplicantInfo: [
       JSON.stringify({
@@ -66,8 +88,25 @@ export async function setupSampleData(ticketRepository: TicketRepository, eventR
     description: '可获得活动 PPT 等资料',
     totalAmount: 2000,
     price: '9.99',
-    requisiteApplicantInfo: [],
-    requisiteParticipantInfo:[]
+    requisiteApplicantInfo: [
+      JSON.stringify({
+        name: "电子邮箱",
+        type: "text",
+        description:  "请输入您的电子邮箱，将用于接收出票邮件"
+      })
+    ],
+    requisiteParticipantInfo:[
+      JSON.stringify({
+        name: "姓名",
+        type: "text",
+        description:  "请输入参与者的真实姓名"
+      }),
+      JSON.stringify({
+        name: "电子邮箱",
+        type: "text",
+        description:  "请输入参与者的电子邮箱，将用于接收活动 PPT 等资料"
+      })
+    ]
   }));
 
   const ticketBox4Id = await ticketRepository.createTicketBox(createTicketBoxObject({
@@ -75,10 +114,27 @@ export async function setupSampleData(ticketRepository: TicketRepository, eventR
     eventId,
     name: '赞助商',
     description: '获得品牌露出机会，详情联系…',
-    totalAmount: 2000,
+    totalAmount: 100,
     price: '999.99',
-    requisiteApplicantInfo: [],
-    requisiteParticipantInfo:[]
+    requisiteApplicantInfo: [
+      JSON.stringify({
+        name: "联系电话",
+        type: "text",
+        description:  "请输入您的联系电话，将用于与您联系洽谈合作事宜"
+      })
+    ],
+    requisiteParticipantInfo:[
+      JSON.stringify({
+        name: "联系电话",
+        type: "text",
+        description:  "请输入参与者的联系电话，将用于与之联系洽谈合作事宜"
+      }),
+      JSON.stringify({
+        name: "公司规模",
+        type: "radio",
+        options: ["100 人以下", "100 至 500 人", "500 人以上", "不愿透露"]
+      })
+    ]
   }));
 }
 
