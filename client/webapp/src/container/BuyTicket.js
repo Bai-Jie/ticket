@@ -31,7 +31,15 @@ export default class BuyTicket extends Component {
     }
 
     render() {
-        const {isLoading, ticketBoxes, selectedTicketBoxId, changeSelectedTicketBoxCounter, numberOfTicketsToBuy} = this.state;
+        const {
+            isLoading,
+            ticketBoxes,
+            selectedTicketBoxId,
+            changeSelectedTicketBoxCounter,
+            numberOfTicketsToBuy,
+            applicantInfo,
+            participantInfos
+        } = this.state;
         const selectedTicketBox = this.selectedTicketBox(this.state);
 
         if (isLoading) {
@@ -55,7 +63,8 @@ export default class BuyTicket extends Component {
                     key={changeSelectedTicketBoxCounter}
                     title="报名者信息"
                     contentView={<FormView
-                        fields={selectedTicketBox.requisiteApplicantInfo}
+                        metaOfFields={selectedTicketBox.requisiteApplicantInfo}
+                        valuesOfFields={applicantInfo}
                         onChange={this.handleApplicantInfoChange}/>}
                 />
                 {Array(numberOfTicketsToBuy).fill(0).map((_, index) =>
@@ -63,7 +72,8 @@ export default class BuyTicket extends Component {
                         key={`${changeSelectedTicketBoxCounter}-${index}`}
                         title={`参与者信息（第 ${index + 1} 位）`}
                         contentView={<FormView
-                            fields={selectedTicketBox.requisiteParticipantInfo}
+                            metaOfFields={selectedTicketBox.requisiteParticipantInfo}
+                            valuesOfFields={participantInfos[index]}
                             onChange={changed => this.handleParticipantInfoChange(index, changed)}/>}
                     />
                 )}
