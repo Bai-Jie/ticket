@@ -46,6 +46,7 @@ export default class BuyTicket extends Component {
                     selectedTicketBoxId={selectedTicketBoxId}
                     onClickSelectTicketBoxItem={this.handleClickSelectTicketBoxItem}
                 />
+                <div className="buy-ticket-space"></div>
                 <NumberOfTicketsToBuyView
                     numberOfTicketsToBuy={numberOfTicketsToBuy}
                     onNumberOfTicketsToBuyChange={this.handleNumberOfTicketsToBuyChange}
