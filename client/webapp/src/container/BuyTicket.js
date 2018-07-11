@@ -57,6 +57,7 @@ export default class BuyTicket extends Component {
                 />
                 {Array(numberOfTicketsToBuy).fill(0).map((_, index) =>
                     <GroupView
+                        key={index}
                         title={`参与者信息（第 ${index + 1} 位）`}
                         contentView={<FormView
                             fields={selectedTicketBox.requisiteParticipantInfo}

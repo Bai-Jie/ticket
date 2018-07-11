@@ -4,7 +4,7 @@ import './FormView.css';
 export default function FormView(props) {
     const {fields, onChange} = props;
 
-    function toFieldView(field) {
+    function toFieldView(field, index) {
         const {name, type} = JSON.parse(field);
         function handleChange(event) {
             const {target} = event;
@@ -23,7 +23,7 @@ export default function FormView(props) {
                 fieldContentView = <p>尚不支持的字段类型：{type}</p>;
                 break;
         }
-        return <FieldView title={name} contentView={fieldContentView} />;
+        return <FieldView key={index} title={name} contentView={fieldContentView} />;
     }
 
     return (<form>
@@ -49,8 +49,8 @@ function RadioFieldContentView(props) {
     const {radioField, onChange} = props;
     const {name, options} = JSON.parse(radioField);
     return (<div>
-        {options.map(option =>
-            <label>
+        {options.map((option, index) =>
+            <label key={index}>
                 <input type="radio" name={name} value={option} onChange={onChange}/>{option}
             </label>
         )}
