@@ -98,7 +98,7 @@ export default class BuyTicket extends Component {
     };
 
     handleNumberOfTicketsToBuyChange = (newNumberOfTicketsToBuy) => {
-        newNumberOfTicketsToBuy = Math.max(newNumberOfTicketsToBuy, 0);
+        newNumberOfTicketsToBuy = Math.max(newNumberOfTicketsToBuy, 1);
         this.setState((prevState) => {
             newNumberOfTicketsToBuy = Math.min(
                 newNumberOfTicketsToBuy,
@@ -130,6 +130,31 @@ export default class BuyTicket extends Component {
 
     handleClickPayButton = async () => {
         const {selectedTicketBoxId, numberOfTicketsToBuy, applicantInfo, participantInfos} = this.state;
+        const selectedTicketBox = this.selectedTicketBox(this.state);
+
+        function haveInputAllFields() {
+            const applicantInfoMeta = selectedTicketBox.requisiteApplicantInfo.map(it => JSON.parse(it));
+            for(const fieldMeta of applicantInfoMeta) {
+                if(!applicantInfo[fieldMeta.name]) {
+                    return false;
+                }
+            }
+            const participantInfoMeta = selectedTicketBox.requisiteParticipantInfo.map(it => JSON.parse(it));
+            for(const participantInfo of participantInfos) {
+                for(const fieldMeta of participantInfoMeta) {
+                    if(!participantInfo[fieldMeta.name]) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        if(!haveInputAllFields()) {
+            alert('有些字段未输入，请输入所有所需信息后重试');
+            return;
+        }
+
         const {message} = await createOrder(
             selectedTicketBoxId,
             numberOfTicketsToBuy,
