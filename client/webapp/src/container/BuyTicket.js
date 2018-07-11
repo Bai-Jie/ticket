@@ -32,7 +32,7 @@ export default class BuyTicket extends Component {
 
     render() {
         const {isLoading, ticketBoxes, selectedTicketBoxId, changeSelectedTicketBoxCounter, numberOfTicketsToBuy} = this.state;
-        const selectedTicketBox = this.selectedTicketBoxId(this.state);
+        const selectedTicketBox = this.selectedTicketBox(this.state);
 
         if (isLoading) {
             return <p>加载中…</p>;
@@ -84,7 +84,7 @@ export default class BuyTicket extends Component {
 
             const newNumberOfTicketsToBuy = Math.min(
                 prevState.numberOfTicketsToBuy,
-                this.selectedTicketBoxId(prevState, clickedTicketBox.id).remainCount
+                this.selectedTicketBox(prevState, clickedTicketBox.id).remainCount
             );
             const newParticipantInfos = Array(newNumberOfTicketsToBuy).fill({});
             return {
@@ -102,7 +102,7 @@ export default class BuyTicket extends Component {
         this.setState((prevState) => {
             newNumberOfTicketsToBuy = Math.min(
                 newNumberOfTicketsToBuy,
-                this.selectedTicketBoxId(prevState).remainCount
+                this.selectedTicketBox(prevState).remainCount
             );
             const newParticipantInfos = prevState.participantInfos.length >= newNumberOfTicketsToBuy ?
                 prevState.participantInfos.slice(0, newNumberOfTicketsToBuy) :
@@ -138,7 +138,7 @@ export default class BuyTicket extends Component {
         alert('来自服务端的 message：\n' + message);
     };
 
-    selectedTicketBoxId(state, selectedTicketBoxId) {
+    selectedTicketBox(state, selectedTicketBoxId) {
         if (selectedTicketBoxId === undefined) {
             selectedTicketBoxId = state.selectedTicketBoxId;
         }
