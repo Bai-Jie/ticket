@@ -39,7 +39,7 @@ export async function loadEventInfo(eventId) {
     }
 }
 
-export async function createOrder(ticketId, numberOfTicketsToBuy, applicantInfo, participantInfos) {
+export async function createOrder(ticketBoxId, numberOfTicketsToBuy, applicantInfo, participantInfos) {
     const response = await graphqlApi.request({
         data: {
             query: `
@@ -51,7 +51,7 @@ export async function createOrder(ticketId, numberOfTicketsToBuy, applicantInfo,
             `,
             variables: {
                 createOrderInput: {
-                    ticketId, numberOfTicketsToBuy, applicantInfo, participantInfos
+                    ticketBoxId, numberOfTicketsToBuy, applicantInfo, participantInfos
                 }
             }
         }

@@ -73,7 +73,7 @@ export class TicketGraphQLApi {
       name: 'CreateOrder',
       description: '创建买票订单',
       inputFields: {
-        ticketId: {
+        ticketBoxId: {
           description: '下单的票盒（票种）的 id',
           type: new GraphQLNonNull(GraphQLID)
         },
